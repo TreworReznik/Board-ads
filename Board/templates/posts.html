@@ -1,0 +1,49 @@
+{% extends 'flatpages/default.html' %}
+{% load static %}
+{% block title %}
+Posts
+{% endblock title %}
+
+{% block content %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+    {% if posts %} {% csrf_token %}
+       <table cellspacing="5" cellpadding="10" border="1" width="100%">
+           {% for p in posts %}
+           <tr>
+               <h1>{{ p.title|truncatewords:2}}</h1>
+               <td align="left" width="150">{{ p.created|date:'d M y' }}</td>
+               <td align="center" width="1000" > {{p.text|truncatewords:20}}</td>
+               <div>
+                   <img src="{{p.picture.url}}">
+               </div>
+
+           </tr>
+           {% endfor %}
+       </table>
+    {% else %}
+       <h2>The news portal is empty</h2>
+    {% endif %}
+    {% if page_obj.has_previous %}
+       <a href="?page=1">1</a>
+       {% if page_obj.previous_page_number != 1 %}
+           ...
+           <a href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a>
+       {% endif %}
+   {% endif %}
+
+   {# Информация о текущей странице #}
+   {{ page_obj.number }}
+
+   {# Информация о следующих страницах #}
+   {% if page_obj.has_next %}
+       <a href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a>
+       {% if paginator.num_pages != page_obj.next_page_number %}
+           ...
+           <a href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
+       {% endif %}
+   {% endif %}
+{% endblock content %}

@@ -7,3 +7,10 @@ colorama~=0.4.6
 numpy~=1.24.4
 requests~=2.31.0
 setuptools~=49.2.1
+defusedxml~=0.7.1
+cffi~=1.15.1
+
+Pillow~=10.0.1
+Markdown~=3.4.4
+zipp~=3.17.0
+django-froala-editor~=4.1.2

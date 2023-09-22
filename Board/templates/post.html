@@ -1,0 +1,12 @@
+{% extends 'flatpages/default.html' %}
+{ load media }
+{% load static %}
+{% block title %}
+post
+{% endblock title %}
+
+{% block content %}
+<h1>{{ post.title }}</h1>
+<h3>{{ post.text }}</h3>
+<img src="{{post.picture.url}}" alt="item">
+{% endblock content %}>
