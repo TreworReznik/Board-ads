@@ -1,0 +1,25 @@
+{% extends 'flatpages/default.html' %}
+{% load static %}
+{% block title %}
+post
+{% endblock title %}
+
+{% block content %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+    {% if responses %}
+        {% for p in responses %}
+        <table cellspacing="5" cellpadding="10" border="1" width="100%">
+        <tr>
+            <td align="left" width="150"> {{ p.re_user }}</td>
+           <td align="center" width="1000">{{ p.text }}</td>
+        </tr>
+        </table>
+        {% endfor %}
+    {% else %}
+    <h2> Ничеог нет  </h2>
+    {% endif %}
+{% endblock content %}>

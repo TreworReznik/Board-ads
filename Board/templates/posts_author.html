@@ -10,11 +10,11 @@ Posts
     <meta charset="UTF-8">
 </head>
 <body>
-    {% if posts %}
-           {% for p in posts %}
+    {% if myposts %}
+           {% for p in myposts %}
         <table cellspacing="5" cellpadding="10" border="1" width="100%">
            <tr>
-               <h1>{{ p.title|truncatewords:2}}</h1>
+               <h1>{{ p.title}}</h1>
                <td align="left" width="150">{{ p.created|date:'d M y' }}</td>
                <td align="center" width="1000" > {{p.text}}</td>
 

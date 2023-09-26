@@ -41,8 +41,10 @@ INSTALLED_APPS = [
     'django.contrib.flatpages',
     'ads',
     'accounts',
-    'froala_editor',
     'django_filters',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
 
 ]
 
@@ -58,6 +60,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
 
 ]
 
@@ -129,6 +132,10 @@ USE_TZ = True
 STATIC_ROOT = '/static/'
 STATIC_URL = 'static/'
 
+MEDIA_URL = 'media/'
+MEDIA_ROOT = BASE_DIR / '/media'
+
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
@@ -138,8 +145,28 @@ STATICFILES_DIRS = [
     BASE_DIR / "static"
 ]
 
-FROALA_EDITOR_PLUGINS = (
-        'file', 'fullscreen', 'image_manager', 'image',  'save', 'video',)
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.yandex.ru'
+EMAIL_PORT = 465
+EMAIL_USE_TLS = False
+EMAIL_USE_SSL = True
 
-MEDIA_URL = 'media/'
-MEDIA_ROOT = '/media'
+EMAIL_HOST_USER = 'ilya.kalini4enko@yandex.ru'
+EMAIL_HOST_PASSWORD = 'iizmbaxrfiamomcr'
+DEFAULT_FROM_EMAIL = 'ilya.kalini4enko@yandex.ru'
+
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+LOGIN_REDIRECT_URL = 'post_list'
+
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_USERNAME_REQUIRED = True
+ACCOUNT_AUTHENTICATION_METHOD = "username_email"
+ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+ACCOUNT_CONFIRM_EMAIL_ON_GET = True
+

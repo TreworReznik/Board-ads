@@ -1,0 +1,42 @@
+{% extends 'flatpages/default.html' %}
+{% block title %}
+Search
+{% endblock title %}
+
+{% block content %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page title</title>
+</head>
+<body>
+
+    {{ string }}
+</body>
+
+
+   <form action="" method="get">
+       {{ filterset.form.as_p }}
+       <input type="submit" value= Search>
+   </form>
+   <hr>
+  {% if search %}
+       <table cellspacing="5" cellpadding="10" border="1" width="100%">
+           {% for post in search %}
+           <tr>
+               <td align="left"  width="150">{{ post.title}}</td>
+               <td align="left" width="150">{{ post.|date:'d.m.Y' }}</td>
+               <td align="center" width="1000">{{ post.text}}</td>
+           </tr>
+           {% endfor %}
+
+       </table>
+
+   {% endif %}
+
+
+{% endblock content %}
+
+</html>
