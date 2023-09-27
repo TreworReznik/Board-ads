@@ -6,7 +6,13 @@ post
 {% endblock title %}
 
 {% block content %}
-<h1>{{ post.title }}</h1>
-<h3>{{ post.text }}</h3>
+<h1>{{ p.title }}</h1>
+<h3>{{ p.text }}</h3>
 <img src="{{post.file.url}}" alt="item">
-{% endblock content %}>
+
+<form method="POST">
+    {% csrf_token %}
+        <a class="btn-link" href="/responses/create/{{ post.id }}">уууууу</a>
+    </form>
+
+{% endblock content %}

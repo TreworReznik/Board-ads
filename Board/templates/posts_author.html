@@ -11,19 +11,25 @@ Posts
 </head>
 <body>
     {% if myposts %}
-           {% for p in myposts %}
+           {% for post in myposts %}
         <table cellspacing="5" cellpadding="10" border="1" width="100%">
            <tr>
                <h1>{{ p.title}}</h1>
-               <td align="left" width="150">{{ p.created|date:'d M y' }}</td>
-               <td align="center" width="1000" > {{p.text}}</td>
-
+               <td align="left" width="150">{{ post.created|date:'d M y' }}</td>
+               <td align="center" width="1000" > {{post.text}}</td>
+                <td>
+                    <a href="{% url 'posts_update' pk=post.id %}">Изменить</a>
+                    <a href="{% url 'post_delete' post.id %}">Удалить</a>
+                </td>
             </tr>
         </table>
            {% endfor %}
 
     {% else %}
-       <h2>The news portal is empty</h2>
+       <h2>У вас нет постов </h2>
+    <h3>
+        <a href="{% url 'post_created' %}"> Создать </a>
+    </h3>
     {% endif %}
     {% if page_obj.has_previous %}
        <a href="?page=1">1</a>

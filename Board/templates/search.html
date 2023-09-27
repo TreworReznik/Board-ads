@@ -23,19 +23,42 @@ Search
    </form>
    <hr>
   {% if search %}
-       <table cellspacing="5" cellpadding="10" border="1" width="100%">
+
            {% for post in search %}
+<table cellspacing="5" cellpadding="10" border="1" width="100%">
            <tr>
-               <td align="left"  width="150">{{ post.title}}</td>
-               <td align="left" width="150">{{ post.|date:'d.m.Y' }}</td>
-               <td align="center" width="1000">{{ post.text}}</td>
+               <a href="{% url 'post_detail' pk=post.id %}">
+                 <h4 >{{ post.title|truncatewords:2 }}</h4>
+                </a>
+               <td align="left" width="150">{{ post.created|date:'d.m.Y' }}</td>
+               <td align="left" width="200" > {{ post.author }}</td>
+               <td align="center" width="1000">{{ post.text }}</td>
            </tr>
+     </table>
            {% endfor %}
 
-       </table>
+
 
    {% endif %}
+{% if page_obj.has_previous %}
+       <a href="?page=1">1</a>
+       {% if page_obj.previous_page_number != 1 %}
+           ...
+           <a href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a>
+       {% endif %}
+   {% endif %}
 
+   {# Информация о текущей странице #}
+   {{ page_obj.number }}
+
+   {# Информация о следующих страницах #}
+   {% if page_obj.has_next %}
+       <a href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a>
+       {% if paginator.num_pages != page_obj.next_page_number %}
+           ...
+           <a href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
+       {% endif %}
+   {% endif %}
 
 {% endblock content %}
 

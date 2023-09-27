@@ -1,5 +1,5 @@
 from django.forms import ModelForm, Select, ChoiceField, CharField, TextInput, Textarea, FileField, EmailField
-from .models import Post
+from .models import Post, Responses
 
 
 class CreateForm(ModelForm):
@@ -43,3 +43,16 @@ class CreateForm(ModelForm):
     class Meta:
         model = Post
         fields = ['category_type', 'title', 'text', 'file']
+
+
+class FormResponses(ModelForm):
+    text = CharField(
+        label='Text',
+        min_length=20,
+        widget=Textarea(
+            attrs={'class': 'form-control'})
+    )
+
+    class Meta:
+        model = Responses
+        fields = ['text']

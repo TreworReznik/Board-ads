@@ -49,6 +49,7 @@ class Responses(models.Model):
         return f'{self.text}: {self.re_user}'
 
 
+
 class Newsletters(models.Model):
     test = models.TextField()
     picture = FroalaField(blank=True, null=True, image_upload='static/img')

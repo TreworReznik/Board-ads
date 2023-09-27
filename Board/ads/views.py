@@ -1,9 +1,13 @@
-from django.views.generic import ListView, DetailView, CreateView, UpdateView
+from django.http import HttpResponseRedirect
+from django.shortcuts import render, redirect
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import Author, Post, Responses
 from .filters import PostFilter
-from .forms import CreateForm
+from .forms import CreateForm, FormResponses
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
+import requests
+from django.contrib.auth.models import User
 
 
 class PostList(LoginRequiredMixin, ListView):
@@ -63,7 +67,6 @@ class UserResponses(LoginRequiredMixin, ListView):
     model = Responses
     ordering = '-date_created'
     template_name = 'responses.html'
-    context_object_name = 'responses'
     paginate_by = 10
 
     def get_context_data(self, **kwargs):
@@ -73,6 +76,18 @@ class UserResponses(LoginRequiredMixin, ListView):
         return context
 
 
+def create_responses(request, id, form=None):
+    if request.method == 'POST':
+        post = Post.objects.get(id=id)
+        form = FormResponses(request.POST)
+        form.instance.re_post = post
+        form.instance.re_user = User.objects.get(id=request.user.id)
+        if form.is_valid():
+            form.save()
+
+    return render(request, 'create_responses.html', {'form': form})
+
+
 class UpdatePost(LoginRequiredMixin, UpdateView):
     raise_exception = True
     form_class = CreateForm
@@ -80,7 +95,7 @@ class UpdatePost(LoginRequiredMixin, UpdateView):
     template_name = 'create_post.html'
 
 
-class DeletePost(LoginRequiredMixin, DetailView):
+class PostDelete(LoginRequiredMixin, DeleteView):
     raise_exception = True
     model = Post
     template_name = 'post_delete.html'
