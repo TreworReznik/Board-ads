@@ -1,12 +1,15 @@
-from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.views.decorators.csrf import csrf_protect
+
 from .models import Author, Post, Responses
 from .filters import PostFilter
 from .forms import CreateForm, FormResponses
+
 from django.urls import reverse_lazy
+
 from django.contrib.auth.mixins import LoginRequiredMixin
-import requests
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 
 
@@ -62,30 +65,43 @@ class PostCreate(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class UserResponses(LoginRequiredMixin, ListView):
-    raise_exception = True
+class ResponsesDetail(DetailView):
     model = Responses
-    ordering = '-date_created'
-    template_name = 'responses.html'
-    paginate_by = 10
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        responses = Responses.objects.filter(re_post__author__author=self.request.user)
-        context["responses"] = responses
-        return context
+    template_name = 'detail_responses.html'
+    context_object_name = 'detail_responses'
 
 
-def create_responses(request, id, form=None):
+@login_required
+@csrf_protect
+def create_responses(request, pk, form=None):
     if request.method == 'POST':
-        post = Post.objects.get(id=id)
         form = FormResponses(request.POST)
-        form.instance.re_post = post
+        form.instance.re_post = Post.objects.get(id=pk)
         form.instance.re_user = User.objects.get(id=request.user.id)
         if form.is_valid():
-            form.save()
+            detail = form.save()
+            return redirect('responses_detail', pk=detail.id)
 
     return render(request, 'create_responses.html', {'form': form})
+
+
+@login_required
+@csrf_protect
+def responses(request):
+    if request.method == 'POST':
+        responses_id = request.POST.get('responses_id')
+        action = request.POST.get('action')
+
+        if action == 'accept':
+            obj = Responses.objects.get(pk=responses_id)
+            obj.status = True
+            obj.save()
+        elif action == 'delete':
+            Responses.objects.filter(pk=responses_id).delete()
+
+    responses_list = Responses.objects.filter(re_post__author__author=request.user)
+
+    return render(request, 'responses.html', {'responses': responses_list})
 
 
 class UpdatePost(LoginRequiredMixin, UpdateView):
@@ -102,7 +118,8 @@ class PostDelete(LoginRequiredMixin, DeleteView):
     success_url = reverse_lazy('post_list')
 
 
-class MyPosts(ListView):
+class MyPosts(LoginRequiredMixin, ListView):
+    raise_exception = True
     model = Post
     ordering = '-created'
     template_name = 'posts_author.html'

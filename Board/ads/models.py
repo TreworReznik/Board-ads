@@ -48,6 +48,8 @@ class Responses(models.Model):
     def __str__(self):
         return f'{self.text}: {self.re_user}'
 
+    def get_absolute_url(self):
+        return reverse('responses_detail', args=[str(self.id)])
 
 
 class Newsletters(models.Model):

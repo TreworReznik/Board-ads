@@ -2,17 +2,25 @@
 { load media }
 {% load static %}
 {% block title %}
-post
+post1
 {% endblock title %}
 
 {% block content %}
-<h1>{{ p.title }}</h1>
-<h3>{{ p.text }}</h3>
-<img src="{{post.file.url}}" alt="item">
-
-<form method="POST">
+<h1>{{ post.title }}</h1>
+<div class="contaner text-center">
+    <div class="row align-items-start">
+        <div class="col">
+            <h5>{{ post.text }}</h5>
+            <form method="POST">
     {% csrf_token %}
-        <a class="btn-link" href="/responses/create/{{ post.id }}">уууууу</a>
+        <a class="btn btn-primary" href="/responses/create/{{ post.id }}" role="button">Оставить отклик</a>
     </form>
+        </div>
+       <div class="col" >
+           <img src="{{post.file.url}}" width="400" height="400" class="rounded float-start" alt="item">
+       </div>
+    </div>
+</div>
+
 
 {% endblock content %}

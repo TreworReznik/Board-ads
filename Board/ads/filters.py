@@ -1,5 +1,5 @@
 from django_filters import FilterSet
-from .models import Post, Author
+from .models import Author
 from django.forms import Select, DateInput, TextInput
 import django_filters
 

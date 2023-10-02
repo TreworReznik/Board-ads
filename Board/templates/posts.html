@@ -17,9 +17,9 @@ Posts
                 <a href="{% url 'post_detail' pk=p.id %}">
                  <h4 >{{ p.title|truncatewords:2}}</h4>
                 </a>
-               <td align="left" width="150">{{ p.created|date:'d M y' }}</td>
-               <td align="center" width="1000" > {{p.author}}</td>
-               <td align="center" width="1000" > {{p.text}}</td>
+               <td align="left" width="200">{{ p.created|date:'d M y' }}</td>
+               <td align="left" width="250" > {{p.author}}</td>
+               <td align="center" width="2000" > {{p.text}}</td>
             </tr>
         </table>
            {% endfor %}

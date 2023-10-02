@@ -12,12 +12,28 @@ post
 <body>
     {% if responses %}
         {% for p in responses %}
-        <table cellspacing="5" cellpadding="10" border="1" width="100%">
+    <table cellspacing="5" cellpadding="10" border="1" width="100%">
+        <form method="post">
+        {% csrf_token %}
+
         <tr>
             <td align="left" width="150"> {{ p.re_user }}</td>
            <td align="center" width="1000">{{ p.text }}</td>
+            <td>
+                <input type="hidden" name="responses_id" value="{{p.id}}">
+
+            <button class="btn btn-outline-primary" name="action" value="accept"> Принять </button>
+            <td>
+            <button class="btn btn-outline-primary" name="action" value="delete">Удалить</button>
+        </td>
+
+
+            </td>
         </tr>
-        </table>
+
+        </form>
+    </table>
+
         {% endfor %}
     {% else %}
     <h2> пусто  </h2>
