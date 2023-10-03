@@ -50,8 +50,3 @@ class Responses(models.Model):
 
     def get_absolute_url(self):
         return reverse('responses_detail', args=[str(self.id)])
-
-
-class Newsletters(models.Model):
-    test = models.TextField()
-    picture = FroalaField(blank=True, null=True, image_upload='static/img')
