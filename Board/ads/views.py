@@ -54,6 +54,7 @@ class PostCreate(LoginRequiredMixin, CreateView):
     template_name = 'create_post.html'
 
     def form_valid(self, form):
+        """ checking if there is a user in the authors ' model , if not , then we create """
         user = self.request.user
         if Author.objects.filter(author=user):
             form.instance.author = Author.objects.get(author=user)
@@ -65,7 +66,7 @@ class PostCreate(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class ResponsesDetail(DetailView):
+class ResponsesDetail(LoginRequiredMixin, DetailView):
     model = Responses
     template_name = 'detail_responses.html'
     context_object_name = 'detail_responses'
@@ -74,10 +75,18 @@ class ResponsesDetail(DetailView):
 @login_required
 @csrf_protect
 def create_responses(request, pk, form=None):
+    """
+    the form of the user's response to the post
+    :param request:
+    :param pk:<int:pk>
+    :param form:
+    :return:render(requests,template_name, context)
+    """
     if request.method == 'POST':
         form = FormResponses(request.POST)
         form.instance.re_post = Post.objects.get(id=pk)
         form.instance.re_user = User.objects.get(id=request.user.id)
+
         if form.is_valid():
             detail = form.save()
             return redirect('responses_detail', pk=detail.id)
@@ -88,6 +97,11 @@ def create_responses(request, pk, form=None):
 @login_required
 @csrf_protect
 def responses(request):
+    """
+    responses to responses and their removal
+    :param request:
+    :return:render(requests,template_name, context)
+    """
     if request.method == 'POST':
         responses_id = request.POST.get('responses_id')
         action = request.POST.get('action')
